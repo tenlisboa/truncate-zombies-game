@@ -1,9 +1,15 @@
 package com.devthunder.main;
 
+import com.devthunder.entities.Entity;
+import com.devthunder.entities.Player;
+import com.devthunder.graphics.Spritesheet;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game extends Canvas implements Runnable {
 
@@ -16,10 +22,18 @@ public class Game extends Canvas implements Runnable {
 
     private BufferedImage image;
 
+    public List<Entity> entities;
+    public Spritesheet spritesheet;
+
     public Game() {
         setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
         initFrame();
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        entities = new ArrayList<Entity>();
+        spritesheet = new Spritesheet("/spritesheet.png");
+
+        Player player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
+        entities.add(player);
     }
 
     public static void main(String[] args) {
@@ -53,7 +67,10 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void tick() {
-
+        for (int i =0; i < entities.size(); i++) {
+            Entity e = entities.get(i);
+            e.tick();
+        }
     }
 
     public void render() {
@@ -66,6 +83,10 @@ public class Game extends Canvas implements Runnable {
         g.setColor(new Color(0,0,0));
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
+        for (int i =0; i < entities.size(); i++) {
+            Entity e = entities.get(i);
+            e.render(g);
+        }
 //        Graphics2D g2d = (Graphics2D) g;
 
         g.dispose();
