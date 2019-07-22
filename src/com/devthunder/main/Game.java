@@ -3,6 +3,7 @@ package com.devthunder.main;
 import com.devthunder.entities.Entity;
 import com.devthunder.entities.Player;
 import com.devthunder.graphics.Spritesheet;
+import com.devthunder.world.World;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,15 +28,20 @@ public class Game extends Canvas implements Runnable, KeyListener {
     public List<Entity> entities;
     public static Spritesheet spritesheet;
 
+    public static World world;
+
     private Player player;
 
     public Game() {
         addKeyListener(this);
         setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
         initFrame();
+
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         entities = new ArrayList<Entity>();
         spritesheet = new Spritesheet("/spritesheet.png");
+
+        world = new World("/map.png");
 
         player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
         entities.add(player);
@@ -87,6 +93,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
         Graphics g = image.getGraphics();
         g.setColor(new Color(0,0,0));
         g.fillRect(0, 0, WIDTH, HEIGHT);
+
+        world.render(g);
 
         for (int i =0; i < entities.size(); i++) {
             Entity e = entities.get(i);
