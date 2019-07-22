@@ -1,5 +1,8 @@
 package com.devthunder.world;
 
+import com.devthunder.entities.*;
+import com.devthunder.main.Game;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -27,17 +30,31 @@ public class World {
                 for (int yy = 0; yy < map.getWidth(); yy++) {
                     int actualPixel = pixels[xx + yy * map.getWidth()];
 
-                    if (actualPixel == 0xFF000000) {
-                        // Floor
-                        tiles[xx + (yy * WIDTH)] = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR);
-                    } else if (actualPixel == 0xFFFFFFFF) {
-                        // Wall
-                        tiles[xx + (yy * WIDTH)] = new WallTile(xx * 16, yy * 16, Tile.TILE_WALL);
-                    } else if (actualPixel == 0xFF0026FF) {
-                        // Player
-                        tiles[xx + (yy * WIDTH)] = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR);
-                    } else {
-                        tiles[xx + (yy * WIDTH)] = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR);
+                    tiles[xx + (yy * WIDTH)] = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR);
+
+                    switch (actualPixel) {
+                        case 0xFFFFFFFF: // Wall
+                            tiles[xx + (yy * WIDTH)] = new WallTile(xx * 16, yy * 16, Tile.TILE_WALL);
+                            break;
+                        case 0xFF0026FF: // Player
+                            Game.player.setX(xx * 16);
+                            Game.player.setY(yy * 16);
+                            break;
+                        case 0xFFFF0000: // Enemy
+                            Game.entities.add(new Enemy(xx*16, yy*16, 16, 16, Entity.ENEMY_EN));
+                            break;
+                        case 0xFFFF6A00: // Weapon
+                            Game.entities.add(new Weapon(xx*16, yy*16, 16, 16, Entity.WEAPON_EN));
+                            break;
+                        case 0xFFFFD800: // Bullet
+                            Game.entities.add(new Bullet(xx*16, yy*16, 16, 16, Entity.BULLET_EN));
+                            break;
+                        case 0xFFFF7F7F: // LifePack
+                            Game.entities.add(new LifePack(xx*16, yy*16, 16, 16, Entity.LIFEPACK_EN));
+                            break;
+                        default: // Floor
+                            tiles[xx + (yy * WIDTH)] = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR);
+                            break;
                     }
                 }
             }
