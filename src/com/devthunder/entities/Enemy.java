@@ -1,6 +1,7 @@
 package com.devthunder.entities;
 
 import com.devthunder.main.Game;
+import com.devthunder.world.Camera;
 import com.devthunder.world.World;
 
 import java.awt.*;
@@ -10,22 +11,31 @@ public class Enemy extends Entity {
 
     private double speed = 0.4;
     private int maskx = 8, masky = 8, maskw = 5, maskh = 5;
+    private int frames, maxFrames = 20, index = 0, maxIndex = 2;
+
+    private BufferedImage[] sprites;
 
     public Enemy(int x, int y, int width, int height, BufferedImage sprite) {
-        super(x, y, width, height, sprite);
+        super(x, y, width, height, null);
+        sprites = new BufferedImage[3];
+        int xPosition = 112;
+        for (int i = 0; i < sprites.length; i++) {
+            sprites[i] = Game.spritesheet.getSprite(xPosition, 16, 16, 16);
+            xPosition += 16;
+        }
     }
 
     public void tick() {
         if (
-                x < Game.player.getX() &&
-                World.isFree((int) (x+speed), this.getY()) &&
-                !isColliding((int) (x+speed), this.getY())
+            x < Game.player.getX() &&
+            World.isFree((int) (x+speed), this.getY()) &&
+            !isColliding((int) (x+speed), this.getY())
         ) {
             x+=speed;
         } else if (
-                    x > Game.player.getX() &&
-                    World.isFree((int) (x-speed), this.getY()) &&
-                    !isColliding((int) (x-speed), this.getY())
+            x > Game.player.getX() &&
+            World.isFree((int) (x-speed), this.getY()) &&
+            !isColliding((int) (x-speed), this.getY())
         ) {
             x-=speed;
         }
@@ -37,11 +47,20 @@ public class Enemy extends Entity {
         ) {
             y+=speed;
         } else if (
-                    y > Game.player.getY() &&
-                    World.isFree(this.getX(), (int)(y-speed)) &&
-                    !isColliding(this.getX(), (int)(y-speed))
+            y > Game.player.getY() &&
+            World.isFree(this.getX(), (int)(y-speed)) &&
+            !isColliding(this.getX(), (int)(y-speed))
         ) {
             y-=speed;
+        }
+
+        frames++;
+        if (frames == maxFrames) {
+            frames = 0;
+            index++;
+            if (index > maxIndex) {
+                index = 0;
+            }
         }
     }
 
@@ -61,5 +80,9 @@ public class Enemy extends Entity {
         }
 
         return false;
+    }
+
+    public void render(Graphics g) {
+        g.drawImage(sprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
     }
 }
