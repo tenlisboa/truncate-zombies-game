@@ -2,6 +2,7 @@ package com.devthunder.entities;
 
 import com.devthunder.main.Game;
 import com.devthunder.world.Camera;
+import com.devthunder.world.World;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,7 +12,7 @@ public class Player extends Entity {
     public boolean right, left, up, down;
     public int right_dir = 0, left_dir = 1;
     public int dir = right_dir;
-    public double speed = 1.4;
+    public double speed = 0.7;
 
     private int frames, maxFrames = 5, index = 0, maxIndex = 3;
     private boolean moved = false;
@@ -63,8 +64,8 @@ public class Player extends Entity {
             }
         }
 
-        Camera.x = this.getX() - (Game.WIDTH/2);
-        Camera.y = this.getY() - (Game.HEIGHT/2);
+        Camera.x = Camera.clamp(this.getX() - (Game.WIDTH/2), 0, World.WIDTH * 16 - Game.WIDTH);
+        Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT/2), 0, World.HEIGTH * 16 - Game.HEIGHT);
     }
 
     public void render(Graphics g) {
