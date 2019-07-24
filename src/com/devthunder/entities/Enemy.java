@@ -25,39 +25,41 @@ public class Enemy extends Entity {
         }
     }
 
+    @Override
     public void tick() {
         if (isCollidingWithPlayer() == false) {
             if (
-                x < Game.player.getX() &&
-                World.isFree((int) (x+speed), this.getY()) &&
-                !isColliding((int) (x+speed), this.getY())
+                    x < Game.player.getX() &&
+                            World.isFree((int) (x + speed), this.getY()) &&
+                            !isColliding((int) (x + speed), this.getY())
             ) {
-                x+=speed;
+                x += speed;
             } else if (
-                x > Game.player.getX() &&
-                World.isFree((int) (x-speed), this.getY()) &&
-                !isColliding((int) (x-speed), this.getY())
+                    x > Game.player.getX() &&
+                            World.isFree((int) (x - speed), this.getY()) &&
+                            !isColliding((int) (x - speed), this.getY())
             ) {
-                x-=speed;
+                x -= speed;
             }
 
             if (
-                y < Game.player.getY() &&
-                World.isFree(this.getX(), (int)(y+speed)) &&
-                !isColliding(this.getX(), (int)(y+speed))
+                    y < Game.player.getY() &&
+                            World.isFree(this.getX(), (int) (y + speed)) &&
+                            !isColliding(this.getX(), (int) (y + speed))
             ) {
-                y+=speed;
+                y += speed;
             } else if (
-                y > Game.player.getY() &&
-                World.isFree(this.getX(), (int)(y-speed)) &&
-                !isColliding(this.getX(), (int)(y-speed))
+                    y > Game.player.getY() &&
+                            World.isFree(this.getX(), (int) (y - speed)) &&
+                            !isColliding(this.getX(), (int) (y - speed))
             ) {
-                y-=speed;
+                y -= speed;
             }
         } else {
             // Coliding with player
             if (Game.rand.nextInt(100) < 10) {
                 Game.player.life -= Game.rand.nextInt(3);
+                Game.player.isDamaged = true;
                 if (Game.player.life <= 0) {
                     // Gameover
                     System.exit(1);
@@ -100,6 +102,7 @@ public class Enemy extends Entity {
         return false;
     }
 
+    @Override
     public void render(Graphics g) {
         g.drawImage(sprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
     }
