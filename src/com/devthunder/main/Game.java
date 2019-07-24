@@ -43,20 +43,22 @@ public class Game extends Canvas implements Runnable, KeyListener {
     public Game() {
         rand = new Random();
         addKeyListener(this);
-        setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
+        setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         initFrame();
 
         ui = new UI();
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        
+        Game.initialize();
+    }
+
+    public static void initialize() {
         entities = new ArrayList<Entity>();
         enemies = new ArrayList<Enemy>();
         spritesheet = new Spritesheet("/spritesheet.png");
-
         player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
         entities.add(player);
-
         world = new World("/map.png");
-
     }
 
     public static void main(String[] args) {
@@ -64,7 +66,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
         game.start();
     }
 
-    public void  start() {
+    public void start() {
         thread = new Thread(this);
         isRunning = true;
         thread.start();
@@ -90,7 +92,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
     }
 
     public void tick() {
-        for (int i =0; i < entities.size(); i++) {
+        for (int i = 0; i < entities.size(); i++) {
             Entity e = entities.get(i);
             e.tick();
         }
@@ -103,19 +105,19 @@ public class Game extends Canvas implements Runnable, KeyListener {
             return;
         }
         Graphics g = image.getGraphics();
-        g.setColor(new Color(0,0,0));
+        g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         world.render(g);
 
-        for (int i =0; i < entities.size(); i++) {
+        for (int i = 0; i < entities.size(); i++) {
             Entity e = entities.get(i);
             e.render(g);
         }
 
         g.dispose();
         g = bs.getDrawGraphics();
-        g.drawImage(image, 0, 0, WIDTH*SCALE, HEIGHT*SCALE, null);
+        g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
 
         ui.render(g);
 

@@ -14,7 +14,7 @@ public class Player extends Entity {
     public int dir = right_dir;
     public double speed = 0.7;
     public int ammo = 0;
-    public static double life = 100, maxLife = 100;
+    public double life = 100, maxLife = 100;
     public boolean isDamaged = false;
 
     private int frames, maxFrames = 5, index = 0, maxIndex = 3;
@@ -80,6 +80,11 @@ public class Player extends Entity {
                 damageFrames = 0;
                 isDamaged = false;
             }
+        }
+
+        if (life <= 0) {
+            Game.initialize();
+            return;
         }
 
         Camera.x = Camera.clamp(this.getX() - (Game.WIDTH / 2), 0, World.WIDTH * 16 - Game.WIDTH);

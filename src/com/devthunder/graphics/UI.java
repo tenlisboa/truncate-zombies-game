@@ -1,6 +1,5 @@
 package com.devthunder.graphics;
 
-import com.devthunder.entities.Player;
 import com.devthunder.main.Game;
 
 import java.awt.*;
@@ -14,12 +13,12 @@ public class UI {
 
         // LIFE
         g.setColor(Color.red);
-        g.fillRect(15, 10, (int) ((Player.life / Player.maxLife) * 150), 20);
+        g.fillRect(15, 10, (int) ((Game.player.life / Game.player.maxLife) * 150), 20);
 
         // LIFE label
         g.setColor(Color.white);
         g.setFont(new Font("arial", Font.BOLD, 17));
-        String lifeLabel = (int) Player.life + "/" + (int) Player.maxLife;
+        String lifeLabel = (int) Game.player.life + "/" + (int) Game.player.maxLife;
         g.drawString(lifeLabel, 20, 25);
 
         // AMMO
