@@ -23,6 +23,7 @@ public class Player extends Entity {
     private BufferedImage[] leftPlayer;
     private BufferedImage playerDamageLeft, playerDamageRight;
     private int damageFrames = 0;
+    private boolean hasGun = false;
 
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
@@ -74,6 +75,7 @@ public class Player extends Entity {
 
         checkLifePackCollision();
         checkAmmoCollision();
+        checkWeaponCollision();
 
         if (isDamaged) {
             damageFrames++;
@@ -90,6 +92,19 @@ public class Player extends Entity {
 
         Camera.x = Camera.clamp(this.getX() - (Game.WIDTH / 2), 0, World.WIDTH * 16 - Game.WIDTH);
         Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT / 2), 0, World.HEIGTH * 16 - Game.HEIGHT);
+    }
+
+    public void checkWeaponCollision() {
+        for (int i = 0; i < Game.entities.size(); i++) {
+            Entity e = Game.entities.get(i);
+            if (e instanceof Weapon) {
+                if (Entity.isColliding(this, e)) {
+                    hasGun = true;
+                    Game.entities.remove(i);
+                    return;
+                }
+            }
+        }
     }
 
     public void checkAmmoCollision() {
@@ -122,17 +137,19 @@ public class Player extends Entity {
 
     @Override
     public void render(Graphics g) {
+        BufferedImage playerSpriteSelected = rightPlayer[index];
+        BufferedImage weaponSpriteSelected = dir == right_dir ? Entity.WEAPON_RIGHT : Entity.WEAPON_LEFT;
+        int xPosition = dir == right_dir ? (this.getX() - Camera.x) + 6 : (this.getX() - Camera.x) - 6;
+
         if (dir == right_dir) {
-            if (!isDamaged)
-                g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-            else
-                g.drawImage(playerDamageRight, this.getX() - Camera.x, this.getY() - Camera.y, null);
+            playerSpriteSelected = !isDamaged ? rightPlayer[index] : playerDamageRight;
 
         } else if (dir == left_dir) {
-            if (!isDamaged)
-                g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-            else
-                g.drawImage(playerDamageLeft, this.getX() - Camera.x, this.getY() - Camera.y, null);
+            playerSpriteSelected = !isDamaged ? leftPlayer[index] : playerDamageLeft;
         }
+
+        g.drawImage(playerSpriteSelected, this.getX() - Camera.x, this.getY() - Camera.y, null);
+        if (hasGun)
+            g.drawImage(weaponSpriteSelected, xPosition, (this.getY() - Camera.y) + 1, null);
     }
 }

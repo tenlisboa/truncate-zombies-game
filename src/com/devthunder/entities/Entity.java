@@ -10,6 +10,8 @@ public class Entity {
 
     public static BufferedImage LIFEPACK_EN = Game.spritesheet.getSprite(6 * 16, 0, 16, 16);
     public static BufferedImage WEAPON_EN = Game.spritesheet.getSprite(7 * 16, 0, 16, 16);
+    public static BufferedImage WEAPON_RIGHT = Game.spritesheet.getSprite(8 * 16, 0, 16, 16);
+    public static BufferedImage WEAPON_LEFT = Game.spritesheet.getSprite(9 * 16, 0, 16, 16);
     public static BufferedImage BULLET_EN = Game.spritesheet.getSprite(6 * 16, 16, 16, 16);
     public static BufferedImage ENEMY_EN = Game.spritesheet.getSprite(7 * 16, 16, 16, 16);
 
@@ -47,11 +49,11 @@ public class Entity {
     }
 
     public int getX() {
-        return (int)this.x;
+        return (int) this.x;
     }
 
-    public  int getY() {
-        return (int)this.y;
+    public int getY() {
+        return (int) this.y;
     }
 
     public int getWidth() {
