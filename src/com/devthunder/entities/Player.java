@@ -21,7 +21,7 @@ public class Player extends Entity {
     private boolean moved = false;
     private BufferedImage[] rightPlayer;
     private BufferedImage[] leftPlayer;
-    private BufferedImage playerDamage;
+    private BufferedImage playerDamageLeft, playerDamageRight;
     private int damageFrames = 0;
 
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
@@ -29,7 +29,8 @@ public class Player extends Entity {
 
         rightPlayer = new BufferedImage[4];
         leftPlayer = new BufferedImage[4];
-        playerDamage = Game.spritesheet.getSprite(0, 16, 16, 16);
+        playerDamageLeft = Game.spritesheet.getSprite(0, 16, 16, 16);
+        playerDamageRight = Game.spritesheet.getSprite(16, 16, 16, 16);
 
         for (int i = 0; i < 4; i++) {
             rightPlayer[i] = Game.spritesheet.getSprite(32 + (i * 16), 0, 16, 16);
@@ -121,14 +122,17 @@ public class Player extends Entity {
 
     @Override
     public void render(Graphics g) {
-        if (!isDamaged) {
-            if (dir == right_dir) {
+        if (dir == right_dir) {
+            if (!isDamaged)
                 g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-            } else if (dir == left_dir) {
+            else
+                g.drawImage(playerDamageRight, this.getX() - Camera.x, this.getY() - Camera.y, null);
+
+        } else if (dir == left_dir) {
+            if (!isDamaged)
                 g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-            }
-        } else {
-            g.drawImage(playerDamage, this.getX() - Camera.x, this.getY() - Camera.y, null);
+            else
+                g.drawImage(playerDamageLeft, this.getX() - Camera.x, this.getY() - Camera.y, null);
         }
     }
 }
