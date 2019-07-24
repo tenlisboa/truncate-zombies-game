@@ -24,6 +24,7 @@ public class Player extends Entity {
     private BufferedImage playerDamageLeft, playerDamageRight;
     private int damageFrames = 0;
     private boolean hasGun = false;
+    public boolean shooting = false;
 
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
@@ -70,6 +71,19 @@ public class Player extends Entity {
                 if (index > maxIndex) {
                     index = 0;
                 }
+            }
+        }
+
+        if (shooting) {
+            shooting = false;
+            if (hasGun && ammo > 0) {
+                ammo--;
+                int dx = dir == right_dir ? 1 : -1;
+                int px = dir == right_dir ? 14 : -4;
+                double py = 6.3;
+
+                Bullet bullet = new Bullet(this.getX() + px, this.getY() + (int) py, 3, 3, null, dx, 0);
+                Game.bullets.add(bullet);
             }
         }
 
