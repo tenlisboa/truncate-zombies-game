@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 public class Enemy extends Entity {
 
     private double speed = 0.4;
-    private int maskx = 8, masky = 8, maskw = 5, maskh = 5;
     private int frames, maxFrames = 20, index = 0, maxIndex = 2;
 
     private BufferedImage[] sprites;
@@ -18,6 +17,7 @@ public class Enemy extends Entity {
     public Enemy(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, null);
         sprites = new BufferedImage[3];
+        this.setMask(8, 8, 5, 5);
         int xPosition = 112;
         for (int i = 0; i < sprites.length; i++) {
             sprites[i] = Game.spritesheet.getSprite(xPosition, 16, 16, 16);

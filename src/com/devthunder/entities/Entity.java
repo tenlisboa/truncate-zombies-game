@@ -17,6 +17,7 @@ public class Entity {
     protected double y;
     protected int width;
     protected int height;
+    protected int maskx, masky, maskw, maskh;
 
     private BufferedImage sprite;
 
@@ -25,8 +26,16 @@ public class Entity {
         this.y = y;
         this.width = width;
         this.height = height;
-
         this.sprite = sprite;
+
+        this.setMask(0, 0, width, height);
+    }
+
+    public void setMask(int maskx, int masky, int maskw, int maskh) {
+        this.maskx = maskx;
+        this.masky = masky;
+        this.maskw = maskw;
+        this.maskh = maskh;
     }
 
     public void setX(int x) {
@@ -56,6 +65,14 @@ public class Entity {
     public void tick() {
 
     }
+
+    public boolean isColliding(Entity e1, Entity e2) {
+        Rectangle e1Mask = new Rectangle(e1.getX() + e1.maskx, e1.getY() + e1.masky, e1.maskw, e1.maskh);
+        Rectangle e2Mask = new Rectangle(e2.getX() + e2.maskx, e2.getY() + e2.masky, e2.maskw, e2.maskh);
+
+        return e1Mask.intersects(e2Mask);
+    }
+
 
     public void render(Graphics g) {
         g.drawImage(sprite, this.getX() - Camera.x, this.getY() - Camera.y, null);
