@@ -2,8 +2,8 @@ package com.devthunder.entities;
 
 import java.awt.image.BufferedImage;
 
-public class Bullet extends Entity {
-    public Bullet(int x, int y, int width, int height, BufferedImage sprite) {
+public class Ammo extends Entity {
+    public Ammo(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
     }
 }

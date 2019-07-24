@@ -11,7 +11,7 @@ import java.io.IOException;
 public class World {
 
     public static Tile[] tiles;
-    public static int WIDTH,HEIGTH;
+    public static int WIDTH, HEIGTH;
     public static final int TILE_SIZE = 16;
 
     public World(String path) {
@@ -42,20 +42,20 @@ public class World {
                             Game.player.setY(yy * 16);
                             break;
                         case 0xFFFF0000: // Enemy
-                            Enemy enemy = new Enemy(xx*16, yy*16, 16, 16, Entity.ENEMY_EN);
+                            Enemy enemy = new Enemy(xx * 16, yy * 16, 16, 16, Entity.ENEMY_EN);
                             Game.entities.add(enemy);
                             Game.enemies.add(enemy);
                             break;
                         case 0xFFFF6A00: // Weapon
-                            Game.entities.add(new Weapon(xx*16, yy*16, 16, 16, Entity.WEAPON_EN));
+                            Game.entities.add(new Weapon(xx * 16, yy * 16, 16, 16, Entity.WEAPON_EN));
                             break;
-                        case 0xFFFFD800: // Bullet
-                            Bullet blt = new Bullet(xx*16, yy*16, 16, 16, Entity.BULLET_EN);
-                            blt.setMask(0, 10, 5, 5);
-                            Game.entities.add(blt);
+                        case 0xFFFFD800: // Ammo
+                            Ammo ammo = new Ammo(xx * 16, yy * 16, 16, 16, Entity.AMMO_EN);
+                            ammo.setMask(0, 10, 5, 5);
+                            Game.entities.add(ammo);
                             break;
                         case 0xFFFF7F7F: // LifePack
-                            Game.entities.add(new LifePack(xx*16, yy*16, 16, 16, Entity.LIFEPACK_EN));
+                            Game.entities.add(new LifePack(xx * 16, yy * 16, 16, 16, Entity.LIFEPACK_EN));
                             break;
                         default: // Floor
                             tiles[xx + (yy * WIDTH)] = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR);
@@ -63,7 +63,7 @@ public class World {
                     }
                 }
             }
-       } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -76,16 +76,16 @@ public class World {
         int y2 = ynext / TILE_SIZE;
 
         int x3 = xnext / TILE_SIZE;
-        int y3 = (ynext + TILE_SIZE -1) / TILE_SIZE;
+        int y3 = (ynext + TILE_SIZE - 1) / TILE_SIZE;
 
-        int x4 = (xnext + TILE_SIZE -1) / TILE_SIZE;
-        int y4 = (ynext + TILE_SIZE -1) / TILE_SIZE;
+        int x4 = (xnext + TILE_SIZE - 1) / TILE_SIZE;
+        int y4 = (ynext + TILE_SIZE - 1) / TILE_SIZE;
 
         return !(
-            tiles[x1 + (y1 * World.WIDTH)] instanceof WallTile ||
-            tiles[x2 + (y2 * World.WIDTH)] instanceof WallTile ||
-            tiles[x3 + (y3 * World.WIDTH)] instanceof WallTile ||
-            tiles[x4 + (y4 * World.WIDTH)] instanceof WallTile
+                tiles[x1 + (y1 * World.WIDTH)] instanceof WallTile ||
+                        tiles[x2 + (y2 * World.WIDTH)] instanceof WallTile ||
+                        tiles[x3 + (y3 * World.WIDTH)] instanceof WallTile ||
+                        tiles[x4 + (y4 * World.WIDTH)] instanceof WallTile
         );
     }
 
@@ -100,7 +100,7 @@ public class World {
             for (int yy = ystart; yy <= yfinal; yy++) {
                 if (xx < 0 || yy < 0 || xx >= WIDTH || yy >= HEIGTH)
                     continue;
-                Tile tile = tiles[xx + (yy*WIDTH)];
+                Tile tile = tiles[xx + (yy * WIDTH)];
                 tile.render(g);
             }
         }

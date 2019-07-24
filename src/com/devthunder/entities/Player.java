@@ -110,7 +110,7 @@ public class Player extends Entity {
     public void checkAmmoCollision() {
         for (int i = 0; i < Game.entities.size(); i++) {
             Entity e = Game.entities.get(i);
-            if (e instanceof Bullet) {
+            if (e instanceof Ammo) {
                 if (Entity.isColliding(this, e)) {
                     ammo += 12;
                     Game.entities.remove(i);
