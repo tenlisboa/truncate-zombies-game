@@ -66,7 +66,7 @@ public class Entity {
 
     }
 
-    public boolean isColliding(Entity e1, Entity e2) {
+    public static boolean isColliding(Entity e1, Entity e2) {
         Rectangle e1Mask = new Rectangle(e1.getX() + e1.maskx, e1.getY() + e1.masky, e1.maskw, e1.maskh);
         Rectangle e2Mask = new Rectangle(e2.getX() + e2.maskx, e2.getY() + e2.masky, e2.maskw, e2.maskh);
 
