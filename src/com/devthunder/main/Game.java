@@ -4,6 +4,7 @@ import com.devthunder.entities.Enemy;
 import com.devthunder.entities.Entity;
 import com.devthunder.entities.Player;
 import com.devthunder.graphics.Spritesheet;
+import com.devthunder.graphics.UI;
 import com.devthunder.world.World;
 
 import javax.swing.*;
@@ -37,12 +38,15 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
     public static Random rand;
 
+    public UI ui;
+
     public Game() {
         rand = new Random();
         addKeyListener(this);
         setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
         initFrame();
 
+        ui = new UI();
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         entities = new ArrayList<Entity>();
         enemies = new ArrayList<Enemy>();
@@ -52,6 +56,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
         entities.add(player);
 
         world = new World("/map.png");
+
     }
 
     public static void main(String[] args) {
@@ -107,7 +112,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
             Entity e = entities.get(i);
             e.render(g);
         }
-//        Graphics2D g2d = (Graphics2D) g;
+        ui.render(g);
 
         g.dispose();
         g = bs.getDrawGraphics();
