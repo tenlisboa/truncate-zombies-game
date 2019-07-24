@@ -24,7 +24,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
     private boolean isRunning = true;
     public static final int WIDTH = 240;
     public static final int HEIGHT = 160;
-    private static final int SCALE = 3;
+    public static final int SCALE = 3;
 
     private BufferedImage image;
 
@@ -112,11 +112,13 @@ public class Game extends Canvas implements Runnable, KeyListener {
             Entity e = entities.get(i);
             e.render(g);
         }
-        ui.render(g);
 
         g.dispose();
         g = bs.getDrawGraphics();
         g.drawImage(image, 0, 0, WIDTH*SCALE, HEIGHT*SCALE, null);
+
+        ui.render(g);
+
         bs.show();
     }
 

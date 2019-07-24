@@ -13,13 +13,13 @@ public class Player extends Entity {
     public int right_dir = 0, left_dir = 1;
     public int dir = right_dir;
     public double speed = 0.7;
+    public int ammo = 0;
+    public static double life = 100, maxLife = 100;
 
     private int frames, maxFrames = 5, index = 0, maxIndex = 3;
     private boolean moved = false;
     private BufferedImage[] rightPlayer;
     private BufferedImage[] leftPlayer;
-
-    public static double life = 100, maxLife = 100;
 
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
@@ -36,23 +36,24 @@ public class Player extends Entity {
         }
     }
 
+    @Override
     public void tick() {
         moved = false;
-        if (right && World.isFree((int)(x+speed), this.getY())) {
+        if (right && World.isFree((int) (x + speed), this.getY())) {
             moved = true;
             dir = right_dir;
-            x+=speed;
-        } else if (left && World.isFree((int)(x-speed), this.getY())) {
+            x += speed;
+        } else if (left && World.isFree((int) (x - speed), this.getY())) {
             moved = true;
             dir = left_dir;
-            x-=speed;
+            x -= speed;
         }
-        if (up && World.isFree(this.getX(), (int)(y-speed))) {
+        if (up && World.isFree(this.getX(), (int) (y - speed))) {
             moved = true;
-            y-=speed;
-        } else if (down && World.isFree(this.getX(), (int)(y+speed))) {
+            y -= speed;
+        } else if (down && World.isFree(this.getX(), (int) (y + speed))) {
             moved = true;
-            y+=speed;
+            y += speed;
         }
 
         if (moved) {
@@ -66,13 +67,27 @@ public class Player extends Entity {
             }
         }
 
-        checkIfCollidingWithLifepack();
+        checkLifePackCollision();
+        checkAmmoCollision();
 
-        Camera.x = Camera.clamp(this.getX() - (Game.WIDTH/2), 0, World.WIDTH * 16 - Game.WIDTH);
-        Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT/2), 0, World.HEIGTH * 16 - Game.HEIGHT);
+        Camera.x = Camera.clamp(this.getX() - (Game.WIDTH / 2), 0, World.WIDTH * 16 - Game.WIDTH);
+        Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT / 2), 0, World.HEIGTH * 16 - Game.HEIGHT);
     }
 
-    public void checkIfCollidingWithLifepack() {
+    public void checkAmmoCollision() {
+        for (int i = 0; i < Game.entities.size(); i++) {
+            Entity e = Game.entities.get(i);
+            if (e instanceof Bullet) {
+                if (Entity.isColliding(this, e)) {
+                    ammo += 12;
+                    Game.entities.remove(i);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void checkLifePackCollision() {
         for (int i = 0; i < Game.entities.size(); i++) {
             Entity e = Game.entities.get(i);
             if (e instanceof LifePack) {
@@ -87,6 +102,7 @@ public class Player extends Entity {
         }
     }
 
+    @Override
     public void render(Graphics g) {
         if (dir == right_dir) {
             g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
