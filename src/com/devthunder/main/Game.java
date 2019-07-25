@@ -42,6 +42,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
     public UI ui;
 
+    public static String gameState = "GAME_OVER";
+
     public Game() {
         rand = new Random();
         addKeyListener(this);
@@ -96,23 +98,27 @@ public class Game extends Canvas implements Runnable, KeyListener {
     }
 
     public void tick() {
-        for (int i = 0; i < entities.size(); i++) {
-            entities.get(i).tick();
-        }
-
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).tick();
-        }
-
-        if (enemies.size() == 0) {
-            // Go to next level
-            CUR_LEVEL++;
-            if (CUR_LEVEL > MAX_LEVELS) {
-                CUR_LEVEL = 1;
+        if (gameState == "NORMAL") {
+            for (int i = 0; i < entities.size(); i++) {
+                entities.get(i).tick();
             }
 
-            String newWorld = "level" + CUR_LEVEL + ".png";
-            initialize(newWorld);
+            for (int i = 0; i < bullets.size(); i++) {
+                bullets.get(i).tick();
+            }
+
+            if (enemies.size() == 0) {
+                // Go to next level
+                CUR_LEVEL++;
+                if (CUR_LEVEL > MAX_LEVELS) {
+                    CUR_LEVEL = 1;
+                }
+
+                String newWorld = "level" + CUR_LEVEL + ".png";
+                initialize(newWorld);
+            }
+        } else if (gameState == "GAME_OVER") {
+            // GAYME OUVE
         }
     }
 
@@ -142,6 +148,16 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
         ui.render(g);
 
+        if (gameState == "GAME_OVER") {
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setColor(new Color(0, 0, 0, 100));
+            g2.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
+
+            g.setFont(new Font("arial", Font.BOLD, 30));
+            g.setColor(Color.white);
+            g.drawString("GAYME OUVE", ((WIDTH * SCALE) / 2) - 100, (HEIGHT * SCALE) / 2);
+            g.drawString(">Press enter to restart", ((WIDTH * SCALE) / 2) - 150, (HEIGHT * SCALE) / 2 + 40);
+        }
         bs.show();
     }
 
