@@ -13,6 +13,9 @@ public class Enemy extends Entity {
     private int frames, maxFrames = 20, index = 0, maxIndex = 2;
     private int life = 10;
 
+    private boolean isDamaged = false;
+    private int damageFrames = 10, currentDamage = 0;
+
     private BufferedImage[] sprites;
 
     public Enemy(int x, int y, int width, int height, BufferedImage sprite) {
@@ -79,6 +82,14 @@ public class Enemy extends Entity {
             Game.entities.remove(this);
             return;
         }
+
+        if (isDamaged) {
+            currentDamage++;
+            if (currentDamage == damageFrames) {
+                currentDamage = 0;
+                isDamaged = false;
+            }
+        }
     }
 
     public void collidingBullet() {
@@ -86,6 +97,7 @@ public class Enemy extends Entity {
             Entity e = Game.bullets.get(i);
             if (e instanceof Bullet) {
                 if (Entity.isColliding(this, e)) {
+                    isDamaged = true;
                     life--;
                     Game.bullets.remove(i);
                     return;
@@ -121,6 +133,7 @@ public class Enemy extends Entity {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(sprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+        BufferedImage sprite = isDamaged ? Entity.ENEMY_FEEDBACK : sprites[index];
+        g.drawImage(sprite, this.getX() - Camera.x, this.getY() - Camera.y, null);
     }
 }
