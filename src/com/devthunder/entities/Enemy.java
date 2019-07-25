@@ -11,6 +11,7 @@ public class Enemy extends Entity {
 
     private double speed = 0.4;
     private int frames, maxFrames = 20, index = 0, maxIndex = 2;
+    private int life = 10;
 
     private BufferedImage[] sprites;
 
@@ -69,6 +70,26 @@ public class Enemy extends Entity {
             index++;
             if (index > maxIndex) {
                 index = 0;
+            }
+        }
+
+        collidingBullet();
+
+        if (life <= 0) {
+            Game.entities.remove(this);
+            return;
+        }
+    }
+
+    public void collidingBullet() {
+        for (int i = 0; i < Game.bullets.size(); i++) {
+            Entity e = Game.bullets.get(i);
+            if (e instanceof Bullet) {
+                if (Entity.isColliding(this, e)) {
+                    life--;
+                    Game.bullets.remove(i);
+                    return;
+                }
             }
         }
     }
