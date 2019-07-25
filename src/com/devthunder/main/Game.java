@@ -35,10 +35,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
     public static Spritesheet spritesheet;
 
     public static World world;
-
     public static Player player;
-
     public static Random rand;
+
+    private int CUR_LEVEL = 1, MAX_LEVELS = 2;
 
     public UI ui;
 
@@ -54,14 +54,15 @@ public class Game extends Canvas implements Runnable, KeyListener {
         Game.initialize();
     }
 
-    public static void initialize() {
+    public static void initialize(String... args) {
         entities = new ArrayList<Entity>();
         enemies = new ArrayList<Enemy>();
         bullets = new ArrayList<Bullet>();
         spritesheet = new Spritesheet("/spritesheet.png");
         player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
         entities.add(player);
-        world = new World("/map.png");
+        String mapPath = args.length > 0 ? args[0] : "level1.png";
+        world = new World("/" + mapPath);
     }
 
     public static void main(String[] args) {
@@ -101,6 +102,17 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).tick();
+        }
+
+        if (enemies.size() == 0) {
+            // Go to next level
+            CUR_LEVEL++;
+            if (CUR_LEVEL > MAX_LEVELS) {
+                CUR_LEVEL = 1;
+            }
+
+            String newWorld = "level" + CUR_LEVEL + ".png";
+            initialize(newWorld);
         }
     }
 

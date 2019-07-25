@@ -79,6 +79,7 @@ public class Enemy extends Entity {
         collidingBullet();
 
         if (life <= 0) {
+            Game.enemies.remove(this);
             Game.entities.remove(this);
             return;
         }
