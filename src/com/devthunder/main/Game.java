@@ -42,7 +42,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
     public UI ui;
 
-    public static String gameState = "GAME_OVER";
+    public static String gameState = "NORMAL";
+    private boolean showMessageGameOver = true;
+    private int framesGameOver = 0;
+    private boolean restartGame = false;
 
     public Game() {
         rand = new Random();
@@ -99,6 +102,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
     public void tick() {
         if (gameState == "NORMAL") {
+            // Prevent for the user see the game over if press enter
+            restartGame = false;
             for (int i = 0; i < entities.size(); i++) {
                 entities.get(i).tick();
             }
@@ -119,6 +124,19 @@ public class Game extends Canvas implements Runnable, KeyListener {
             }
         } else if (gameState == "GAME_OVER") {
             // GAYME OUVE
+            framesGameOver++;
+            if (framesGameOver == 15) {
+                framesGameOver = 0;
+                showMessageGameOver = !showMessageGameOver;
+            }
+
+            if (restartGame) {
+                restartGame = false;
+                gameState = "NORMAL";
+                CUR_LEVEL = 1;
+                String newWorld = "level" + CUR_LEVEL + ".png";
+                Game.initialize(newWorld);
+            }
         }
     }
 
@@ -156,7 +174,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
             g.setFont(new Font("arial", Font.BOLD, 30));
             g.setColor(Color.white);
             g.drawString("GAYME OUVE", ((WIDTH * SCALE) / 2) - 100, (HEIGHT * SCALE) / 2);
-            g.drawString(">Press enter to restart", ((WIDTH * SCALE) / 2) - 150, (HEIGHT * SCALE) / 2 + 40);
+            if (showMessageGameOver)
+                g.drawString(">Press enter to restart", ((WIDTH * SCALE) / 2) - 150, (HEIGHT * SCALE) / 2 + 40);
         }
         bs.show();
     }
@@ -218,6 +237,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             player.shooting = true;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            restartGame = true;
         }
     }
 
