@@ -41,8 +41,9 @@ public class Game extends Canvas implements Runnable, KeyListener {
     private int CUR_LEVEL = 1, MAX_LEVELS = 2;
 
     public UI ui;
+    public static Menu menu;
 
-    public static String gameState = "NORMAL";
+    public static String gameState = "MENU";
     private boolean showMessageGameOver = true;
     private int framesGameOver = 0;
     private boolean restartGame = false;
@@ -68,6 +69,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
         entities.add(player);
         String mapPath = args.length > 0 ? args[0] : "level1.png";
         world = new World("/" + mapPath);
+
+        menu = new Menu();
     }
 
     public static void main(String[] args) {
@@ -137,6 +140,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
                 String newWorld = "level" + CUR_LEVEL + ".png";
                 Game.initialize(newWorld);
             }
+        } else if (gameState == "MENU") {
+            menu.tick();
         }
     }
 
@@ -176,6 +181,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
             g.drawString("GAYME OUVE", ((WIDTH * SCALE) / 2) - 100, (HEIGHT * SCALE) / 2);
             if (showMessageGameOver)
                 g.drawString(">Press enter to restart", ((WIDTH * SCALE) / 2) - 150, (HEIGHT * SCALE) / 2 + 40);
+        } else if (gameState == "MENU") {
+            menu.render(g);
         }
         bs.show();
     }
@@ -230,9 +237,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_UP ||
                 e.getKeyCode() == KeyEvent.VK_W) {
             player.up = true;
+            menu.up = gameState == "MENU" ? true : false;
         } else if (e.getKeyCode() == KeyEvent.VK_DOWN ||
                 e.getKeyCode() == KeyEvent.VK_S) {
             player.down = true;
+            menu.down = gameState == "MENU" ? true : false;
         }
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
