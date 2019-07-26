@@ -8,7 +8,7 @@ public class Menu {
     public int currentOption = 0;
     public int maxOptions = options.length - 1;
 
-    public boolean up, down;
+    public boolean up, down, enter;
 
     public void tick() {
         if (up) {
@@ -23,11 +23,20 @@ public class Menu {
             if (currentOption > maxOptions)
                 currentOption = 0;
         }
+        if (enter) {
+            enter = false;
+            if (options[currentOption] == "Novo Jogo") {
+                Game.gameState = "NORMAL";
+                Game.initialize();
+            } else if (options[currentOption] == "Sair")
+                System.exit(1);
+        }
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.black);
-        g.fillRect(0, 0, Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(new Color(0, 0, 0, 100));
+        g2.fillRect(0, 0, Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE);
         g.setColor(Color.white);
         g.setFont(new Font("arial", Font.BOLD, 36));
         g.drawString(">Truncate Zoobies<", (Game.WIDTH * Game.SCALE) / 2 - 170, (Game.HEIGHT * Game.SCALE) / 2 - 150);
