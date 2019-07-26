@@ -34,13 +34,13 @@ public class Enemy extends Entity {
         if (isCollidingWithPlayer() == false) {
             if (
                     x < Game.player.getX() &&
-                            World.isFree((int) (x + speed), this.getY()) &&
+                            World.isFree((int) (x + speed), this.getY(), z) &&
                             !isColliding((int) (x + speed), this.getY())
             ) {
                 x += speed;
             } else if (
                     x > Game.player.getX() &&
-                            World.isFree((int) (x - speed), this.getY()) &&
+                            World.isFree((int) (x - speed), this.getY(), z) &&
                             !isColliding((int) (x - speed), this.getY())
             ) {
                 x -= speed;
@@ -48,13 +48,13 @@ public class Enemy extends Entity {
 
             if (
                     y < Game.player.getY() &&
-                            World.isFree(this.getX(), (int) (y + speed)) &&
+                            World.isFree(this.getX(), (int) (y + speed), z) &&
                             !isColliding(this.getX(), (int) (y + speed))
             ) {
                 y += speed;
             } else if (
                     y > Game.player.getY() &&
-                            World.isFree(this.getX(), (int) (y - speed)) &&
+                            World.isFree(this.getX(), (int) (y - speed), z) &&
                             !isColliding(this.getX(), (int) (y - speed))
             ) {
                 y -= speed;

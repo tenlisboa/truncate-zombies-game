@@ -49,7 +49,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
     private boolean restartGame = false;
 
     public Game() {
-        Sound.music.loop();
+//        Sound.music.loop();
         rand = new Random();
         addKeyListener(this);
         setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
@@ -227,6 +227,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            player.jump = true;
+        }
+
         if (e.getKeyCode() == KeyEvent.VK_RIGHT ||
                 e.getKeyCode() == KeyEvent.VK_D) {
             player.right = true;
@@ -245,7 +249,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
             menu.down = gameState == "MENU" ? true : false;
         }
 
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+        if (e.getKeyCode() == KeyEvent.VK_X) {
             player.shooting = true;
         }
 

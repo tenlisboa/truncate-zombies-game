@@ -26,6 +26,13 @@ public class Player extends Entity {
     private boolean hasGun = false;
     public boolean shooting = false;
 
+    public boolean jump = false;
+    private int jumpSpeed = 1;
+    private boolean jumpUp = false, jumpDown = false;
+    private boolean jumping = false;
+    private int z = 0;
+    private int jumpFrames = 25, currentJumpFrames = 0;
+
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
 
@@ -45,20 +52,48 @@ public class Player extends Entity {
 
     @Override
     public void tick() {
+        if (jump) {
+            if (jumping == false) {
+                jump = false;
+                jumping = true;
+                jumpUp = true;
+            }
+        }
+
+        if (jumping) {
+            if (jumpUp) {
+                currentJumpFrames += jumpSpeed;
+            } else if (jumpDown) {
+                currentJumpFrames -= jumpSpeed;
+
+                if (currentJumpFrames <= 0) {
+                    jumping = false;
+                    jumpDown = false;
+                    jumpUp = false;
+                }
+            }
+
+            z = currentJumpFrames;
+            if (currentJumpFrames >= jumpFrames) {
+                jumpUp = false;
+                jumpDown = true;
+            }
+        }
+
         moved = false;
-        if (right && World.isFree((int) (x + speed), this.getY())) {
+        if (right && World.isFree((int) (x + speed), this.getY(), z)) {
             moved = true;
             dir = right_dir;
             x += speed;
-        } else if (left && World.isFree((int) (x - speed), this.getY())) {
+        } else if (left && World.isFree((int) (x - speed), this.getY(), z)) {
             moved = true;
             dir = left_dir;
             x -= speed;
         }
-        if (up && World.isFree(this.getX(), (int) (y - speed))) {
+        if (up && World.isFree(this.getX(), (int) (y - speed), z)) {
             moved = true;
             y -= speed;
-        } else if (down && World.isFree(this.getX(), (int) (y + speed))) {
+        } else if (down && World.isFree(this.getX(), (int) (y + speed), z)) {
             moved = true;
             y += speed;
         }
@@ -162,8 +197,8 @@ public class Player extends Entity {
             playerSpriteSelected = !isDamaged ? leftPlayer[index] : playerDamageLeft;
         }
 
-        g.drawImage(playerSpriteSelected, this.getX() - Camera.x, this.getY() - Camera.y, null);
+        g.drawImage(playerSpriteSelected, this.getX() - Camera.x, (this.getY() - Camera.y) - z, null);
         if (hasGun)
-            g.drawImage(weaponSpriteSelected, xPosition, (this.getY() - Camera.y) + 1, null);
+            g.drawImage(weaponSpriteSelected, xPosition, ((this.getY() - Camera.y) - z) + 1, null);
     }
 }
