@@ -31,40 +31,44 @@ public class Enemy extends Entity {
 
     @Override
     public void tick() {
-        if (isCollidingWithPlayer() == false) {
-            if (
-                    x < Game.player.getX() &&
-                            World.isFree((int) (x + speed), this.getY(), z) &&
-                            !isColliding((int) (x + speed), this.getY())
-            ) {
-                x += speed;
-            } else if (
-                    x > Game.player.getX() &&
-                            World.isFree((int) (x - speed), this.getY(), z) &&
-                            !isColliding((int) (x - speed), this.getY())
-            ) {
-                x -= speed;
+        double distance = this.calculateDistance(this.getX(), this.getY(), Game.player.getX(), Game.player.getY());
+        if (distance < 80) {
+            if (isCollidingWithPlayer() == false) {
+                if (
+                        x < Game.player.getX() &&
+                                World.isFree((int) (x + speed), this.getY(), z) &&
+                                !isColliding((int) (x + speed), this.getY())
+                ) {
+                    x += speed;
+                } else if (
+                        x > Game.player.getX() &&
+                                World.isFree((int) (x - speed), this.getY(), z) &&
+                                !isColliding((int) (x - speed), this.getY())
+                ) {
+                    x -= speed;
+                }
+
+                if (
+                        y < Game.player.getY() &&
+                                World.isFree(this.getX(), (int) (y + speed), z) &&
+                                !isColliding(this.getX(), (int) (y + speed))
+                ) {
+                    y += speed;
+                } else if (
+                        y > Game.player.getY() &&
+                                World.isFree(this.getX(), (int) (y - speed), z) &&
+                                !isColliding(this.getX(), (int) (y - speed))
+                ) {
+                    y -= speed;
+                }
+            } else {
+                // Coliding with player
+                if (Game.rand.nextInt(100) < 10) {
+                    Game.player.life -= Game.rand.nextInt(3);
+                    Game.player.isDamaged = true;
+                }
             }
 
-            if (
-                    y < Game.player.getY() &&
-                            World.isFree(this.getX(), (int) (y + speed), z) &&
-                            !isColliding(this.getX(), (int) (y + speed))
-            ) {
-                y += speed;
-            } else if (
-                    y > Game.player.getY() &&
-                            World.isFree(this.getX(), (int) (y - speed), z) &&
-                            !isColliding(this.getX(), (int) (y - speed))
-            ) {
-                y -= speed;
-            }
-        } else {
-            // Coliding with player
-            if (Game.rand.nextInt(100) < 10) {
-                Game.player.life -= Game.rand.nextInt(3);
-                Game.player.isDamaged = true;
-            }
         }
 
         frames++;
