@@ -117,11 +117,16 @@ public class Game extends Canvas implements Runnable, KeyListener {
             }
 
             if (enemies.size() == 0) {
-                // Go to next level
+                // TODO: LevelUp
                 CUR_LEVEL++;
                 if (CUR_LEVEL > MAX_LEVELS) {
                     CUR_LEVEL = 1;
                 }
+
+                // TODO: Save the game
+                String[] key = {"level"};
+                int[] value = {CUR_LEVEL};
+                Saver.saveGame(key, value, Saver.ENCODE);
 
                 String newWorld = "level" + CUR_LEVEL + ".png";
                 initialize(newWorld);
@@ -139,7 +144,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
                 gameState = "NORMAL";
                 CUR_LEVEL = 1;
                 String newWorld = "level" + CUR_LEVEL + ".png";
-                Game.initialize(newWorld);
+                initialize(newWorld);
             }
         } else if (gameState == "MENU") {
             menu.tick();
